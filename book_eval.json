@@ -1,0 +1,51 @@
+[
+  {
+    "id": "cpu-ready-meaning",
+    "question": "What does CPU Ready measure, and what causes it?",
+    "chapter": "CPU",
+    "expected_points": "CPU Ready is a contention metric: time a vCPU is ready/wants to run but the ESXi scheduler has no physical thread available, so the vCPU waits. It is caused by the hypervisor (e.g. CPU overcommitment, a CPU limit, low shares, or co-scheduling of many vCPUs) and is invisible to the Guest OS.",
+    "must_consider": ["contention or waiting (not utilization)", "hypervisor/scheduler cause such as overcommit or limit"]
+  },
+  {
+    "id": "ready-vs-usage",
+    "question": "What is the difference between CPU Usage and CPU Ready?",
+    "chapter": "CPU",
+    "expected_points": "CPU Usage is a utilization/throughput metric (how much CPU the VM is actually consuming). CPU Ready is a contention metric (time spent waiting for a physical thread). One measures work done, the other measures waiting; high Usage is normal, high Ready signals a scheduling/contention problem.",
+    "must_consider": ["Usage = utilization/consumption", "Ready = contention/waiting"]
+  },
+  {
+    "id": "ready-not-on-esxi",
+    "question": "Why does the CPU Ready metric not apply at the ESXi host level?",
+    "chapter": "Provider",
+    "expected_points": "A VM is a consumer that shares physical cores, so it can be made to wait (Ready). ESXi is the provider/physical layer: a core or thread is either running or idle and is never made to wait, so contention metrics like Ready do not apply to ESXi.",
+    "must_consider": ["VM = consumer, ESXi = provider/physical", "a core/thread is either running or idle (never 'ready')"]
+  },
+  {
+    "id": "balloon-meaning",
+    "question": "If I see memory ballooning on a VM, does that mean the ESXi host is out of memory and the VM is suffering?",
+    "chapter": "Memory",
+    "expected_points": "Not necessarily. Ballooning is a proactive reclamation mechanism and the first sign of unmet demand; it happens before ESXi is actually unable to meet demand. It reclaims idle/cache memory and reduces guest cache, but by itself it does not mean ESXi cannot meet demand — demand is only truly unmet when contention (e.g. swapping/latency) occurs.",
+    "must_consider": ["ballooning is proactive / an early sign, not proof of contention", "it reclaims cache/idle memory; real shortage shows as swapping or memory latency"]
+  },
+  {
+    "id": "consumer-provider",
+    "question": "Explain the Consumer vs Provider view of metrics in vSphere.",
+    "chapter": "Introduction",
+    "expected_points": "Virtualization splits the stack into Consumers (VMs) and Providers (ESXi/Cluster). VMs consume resources and have contention metrics; providers expose provider-only metrics (e.g. the physical NIC) plus sum-of-consumer metrics that aggregate the VMs. Consumer metrics are about performance/contention; provider metrics are about capacity/utilization.",
+    "must_consider": ["consumer = VM, provider = ESXi/cluster", "provider has provider-only metrics and sum-of-consumer metrics"]
+  },
+  {
+    "id": "guest-ht-awareness",
+    "question": "Is the Guest OS aware of hyper-threading on the physical CPU?",
+    "chapter": "CPU",
+    "expected_points": "No. The Guest OS is unaware of hyper-threading because ESXi does not expose it to the VM. The VM takes the consumer view and sees its vCPUs as cores; only ESXi (the provider) is HT-aware and sees physical cores and their two threads.",
+    "must_consider": ["Guest OS is NOT aware of hyper-threading", "only ESXi/provider sees HT"]
+  },
+  {
+    "id": "triple-see",
+    "question": "What is the Triple See Method?",
+    "chapter": "Introduction",
+    "expected_points": "A metrics-analysis approach introduced in the book (inspired by the USE, RED, and Google Golden Signal methods, designed for Broadcom VCF). It says to evaluate three peer metric types together as one integrated set before concluding: Contention (something bad — performance/availability), Consumption (something good — capacity/cost/sustainability), and Context (the 'it depends' factor — configuration/inventory).",
+    "must_consider": ["three metric types: Contention, Consumption, Context", "see all three together as one set before concluding"]
+  }
+]

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vsphere-metrics-qa"
+version = "0.1.0"
+description = "VMware vSphere Metrics Q&A CLI"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=0.84.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.scripts]
+vsphere-qa = "agent:main"
+
+[tool.setuptools]
+py-modules = ["agent"]

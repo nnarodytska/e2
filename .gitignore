@@ -1,0 +1,43 @@
+# Environment
+.env
+__pycache__/
+*.pyc
+
+# Python build artifacts
+*.egg-info/
+
+# Book source docx and extracted images (too large for git)
+book/
+images/
+
+# Runtime data
+feedback.db
+
+# Book source (too large for git)
+*.docx
+
+# Ngrok
+ngrok_recovery_codes.txt
+
+# Local notes (not for repo)
+README.local.md
+
+# Claude
+.claude/
+
+# System
+.DS_Store
+*.swp
+
+# IDE
+.vscode/
+.idea/
+tests/
+
+# Local virtualenv
+.venv/
+# Generated eval cases
+book_eval_generated.json
+
+# Source diagram (not tracked)
+diagrams/vSphere Performance Troubleshooting.drawio
